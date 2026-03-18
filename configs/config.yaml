@@ -1,0 +1,9 @@
+data_dir: "data"
+output_dir: "outputs"
+
+sample_size_for_stats: 100000
+random_seed: 42
+
+lgbm_params: {}
+
+xgb_params: {}
