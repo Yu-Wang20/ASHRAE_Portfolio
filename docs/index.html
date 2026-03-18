@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASHRAE Energy Predictor — Portfolio Reports</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif; color: #333; background: #f5f5f5; line-height: 1.6; }
+        header { background: #1a1a2e; color: #fff; padding: 3rem 2rem; text-align: center; }
+        header h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        header p { font-size: 1.1rem; color: #a0a0c0; max-width: 700px; margin: 0 auto; }
+        .badges { margin-top: 1rem; }
+        .badges img { margin: 0 4px; }
+        main { max-width: 800px; margin: -2rem auto 3rem; padding: 0 1.5rem; }
+        .card { background: #fff; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); padding: 2rem; margin-bottom: 1.5rem; transition: box-shadow 0.2s; }
+        .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.14); }
+        .card h2 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+        .card h2 a { color: #1a1a2e; text-decoration: none; }
+        .card h2 a:hover { color: #e94560; }
+        .card p { color: #555; font-size: 0.95rem; margin-bottom: 1rem; }
+        .card .tag { display: inline-block; background: #eef; color: #336; font-size: 0.78rem; padding: 3px 10px; border-radius: 12px; margin-right: 6px; }
+        .card .tag.green { background: #efd; color: #363; }
+        .card .tag.orange { background: #fef3e0; color: #854; }
+        .btn { display: inline-block; background: #e94560; color: #fff; text-decoration: none; padding: 0.6rem 1.5rem; border-radius: 6px; font-weight: 600; font-size: 0.95rem; transition: background 0.2s; }
+        .btn:hover { background: #c73350; }
+        footer { text-align: center; padding: 2rem; color: #888; font-size: 0.85rem; }
+        footer a { color: #e94560; text-decoration: none; }
+        .stats { display: flex; justify-content: center; gap: 2.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
+        .stat { text-align: center; }
+        .stat .num { font-size: 1.6rem; font-weight: 700; color: #e94560; }
+        .stat .label { font-size: 0.8rem; color: #a0a0c0; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ASHRAE Energy Predictor</h1>
+        <p>End-to-end data science portfolio: rigorous statistical inference meets industrial-scale ML engineering on 20M+ hourly energy readings.</p>
+        <div class="badges">
+            <img src="https://img.shields.io/badge/Python-3.13-blue" alt="Python">
+            <img src="https://img.shields.io/badge/LightGBM-4.6-green" alt="LightGBM">
+            <img src="https://img.shields.io/badge/SHAP-0.51-orange" alt="SHAP">
+        </div>
+        <div class="stats">
+            <div class="stat"><div class="num">20.2M</div><div class="label">Meter Readings</div></div>
+            <div class="stat"><div class="num">1,448</div><div class="label">Buildings</div></div>
+            <div class="stat"><div class="num">0.7343</div><div class="label">RMSLE (LightGBM)</div></div>
+            <div class="stat"><div class="num">59.5%</div><div class="label">Improvement over OLS</div></div>
+        </div>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2><a href="02_statistical_inference.html">Statistical Inference Report</a></h2>
+            <p>A rigorous walk through classical OLS diagnostics on the ASHRAE energy dataset. Every Gauss-Markov assumption is tested and quantified — multicollinearity (VIF), heteroscedasticity (Breusch-Pagan), non-normality (Shapiro-Wilk), autocorrelation (Durbin-Watson), and influential points (Cook's Distance). Each violation is used as mathematical justification to advance the modelling approach.</p>
+            <span class="tag">OLS Diagnostics</span>
+            <span class="tag">Breusch-Pagan</span>
+            <span class="tag">Durbin-Watson</span>
+            <span class="tag">Cook's Distance</span>
+            <span class="tag">LOWESS</span>
+            <br><br>
+            <a href="02_statistical_inference.html" class="btn">Read Report &rarr;</a>
+        </div>
+
+        <div class="card">
+            <h2><a href="04_interpretability.html">Model Interpretability &amp; SHAP Analysis</a></h2>
+            <p>Decomposes every LightGBM prediction into per-feature contributions using SHAP (Shapley Additive Explanations). Includes global feature importance, temperature dependence with time-of-day interaction, single-prediction waterfall explanations in business language, and a 2-week actual vs predicted time-series validation.</p>
+            <span class="tag green">SHAP Beeswarm</span>
+            <span class="tag green">Dependence Plot</span>
+            <span class="tag green">Waterfall</span>
+            <span class="tag orange">Time-Series Validation</span>
+            <br><br>
+            <a href="04_interpretability.html" class="btn">Read Report &rarr;</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>
+            <a href="https://github.com/Yu-Wang20/ASHRAE_Portfolio">View Source on GitHub</a>
+            &nbsp;&middot;&nbsp;
+            Built by Yu Wang
+            &nbsp;&middot;&nbsp;
+            Data from <a href="https://www.kaggle.com/competitions/ashrae-energy-prediction">ASHRAE Great Energy Predictor III</a>
+        </p>
+    </footer>
+</body>
+</html>

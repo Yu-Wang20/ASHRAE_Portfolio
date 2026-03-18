@@ -3,6 +3,10 @@
 ![SHAP](https://img.shields.io/badge/SHAP-0.51-orange)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
+> **Interactive Reports:**
+> [Statistical Inference](https://yu-wang20.github.io/ASHRAE_Portfolio/02_statistical_inference.html) |
+> [SHAP Interpretability](https://yu-wang20.github.io/ASHRAE_Portfolio/04_interpretability.html)
+
 # ASHRAE Energy Predictor — End-to-End Portfolio
 
 A production-grade data science portfolio demonstrating **rigorous statistical inference** combined with **industrial-scale ML engineering**. Built on 20M+ hourly energy readings from 1,448 buildings across 16 sites in the [ASHRAE Great Energy Predictor III](https://www.kaggle.com/competitions/ashrae-energy-prediction) competition. Every classical assumption is tested, every violation is quantified, and every modelling decision is mathematically justified.
