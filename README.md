@@ -3,9 +3,7 @@
 ![SHAP](https://img.shields.io/badge/SHAP-0.51-orange)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
-> **Interactive Reports:**
-> [Statistical Inference](https://yu-wang20.github.io/ASHRAE_Portfolio/02_statistical_inference.html) |
-> [SHAP Interpretability](https://yu-wang20.github.io/ASHRAE_Portfolio/04_interpretability.html)
+> 🚀 **Live Demo:** [ASHRAE Energy Explorer](https://ashrae-yu.streamlit.app) | 📄 [Statistical Report](https://yu-wang20.github.io/ASHRAE_Portfolio/02_statistical_inference.html) | 🔍 [SHAP Analysis](https://yu-wang20.github.io/ASHRAE_Portfolio/04_interpretability.html)
 
 # ASHRAE Energy Predictor — End-to-End Portfolio
 
