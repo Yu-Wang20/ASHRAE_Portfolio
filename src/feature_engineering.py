@@ -181,13 +181,19 @@ class FeatureEngineer:
         windows : list of int, optional
             Window sizes in hours.  Defaults to ``[24, 168]``.
 
-        New columns (per window *w*)
-        -----------------------------
-        - ``rolling_mean_{w}h`` : rolling mean of ``meter_reading``.
-        - ``rolling_std_{w}h``  : rolling standard deviation.
+        New columns
+        -----------
+        - ``rolling_mean_24h``  : 24-hour rolling mean of ``meter_reading``.
+        - ``rolling_std_24h``   : 24-hour rolling standard deviation.
+        - ``rolling_mean_168h`` : 168-hour (1-week) rolling mean.
 
-        ``min_periods=1`` is used so that only the very first row per
-        group is NaN-free from the start; no rows are lost.
+        The 24-hour window gets both mean and std to capture intra-day
+        volatility.  The 168-hour window provides only the mean — the
+        weekly std adds little information beyond what the daily std
+        already captures, while doubling memory cost.
+
+        ``min_periods=1`` is used so that partial windows at the start
+        of each group still produce values; no rows are lost.
         """
         if windows is None:
             windows = [24, 168]
@@ -200,21 +206,23 @@ class FeatureEngineer:
         grouped = self.df.groupby(["building_id", "meter"])["meter_reading"]
 
         for w in windows:
+            # Rolling mean for every window
             mean_col = f"rolling_mean_{w}h"
-            std_col = f"rolling_std_{w}h"
-
             self.df[mean_col] = grouped.transform(
-                lambda s: s.rolling(window=w, min_periods=1).mean()
+                lambda s, _w=w: s.rolling(window=_w, min_periods=1).mean()
             )
-            self.df[std_col] = grouped.transform(
-                lambda s: s.rolling(window=w, min_periods=1).std()
-            )
+            logger.info("  window=%dh  → %s", w, mean_col)
 
-            # First row per group will have std = NaN (single observation);
-            # fill with 0 since there is no variance to measure.
-            self.df[std_col] = self.df[std_col].fillna(0.0)
-
-            logger.info("  window=%dh  → %s, %s", w, mean_col, std_col)
+            # Rolling std only for the 24h window
+            if w == 24:
+                std_col = f"rolling_std_{w}h"
+                self.df[std_col] = grouped.transform(
+                    lambda s, _w=w: s.rolling(window=_w, min_periods=1).std()
+                )
+                # First row per group has std = NaN (single observation);
+                # fill with 0 since there is no variance to measure.
+                self.df[std_col] = self.df[std_col].fillna(0.0)
+                logger.info("  window=%dh  → %s", w, std_col)
 
         logger.info("Added rolling features for windows: %s", windows)
 
@@ -283,10 +291,12 @@ class FeatureEngineer:
 
         - ``feels_like_approx`` : simplified heat-index proxy
             ``T_air − 0.55 × (1 − RH_proxy) × (T_air − 14.5)``
-            where ``RH_proxy = dew_temperature / (air_temperature + ε)``.
-            This is a linearised Steadman approximation that gives the
-            model an explicit "perceived temperature" signal without
-            requiring full psychrometric calculations.
+            where ``RH_proxy = dew_temperature / air_temperature + ε``.
+            The ε (1e-6) is added to the ratio (not the denominator) to
+            nudge the humidity proxy away from exact zero.  This is a
+            linearised Steadman approximation that gives the model an
+            explicit "perceived temperature" signal without requiring
+            full psychrometric calculations.
 
         Prerequisites
         -------------
@@ -305,11 +315,14 @@ class FeatureEngineer:
         logger.info("Created temp_x_hour = air_temperature × hour_sin")
 
         # feels_like_approx (simplified heat-index proxy)
-        eps = 1e-6  # prevent division by zero
+        # RH_proxy = dew_temperature / air_temperature + ε
+        # The ε is added to the ratio to nudge away from exact zero,
+        # matching the spec: (dew_temperature/air_temperature + 1e-6)
+        eps = 1e-6
         t_air = self.df["air_temperature"]
         t_dew = self.df["dew_temperature"]
 
-        rh_proxy = t_dew / (t_air + eps)
+        rh_proxy = t_dew / t_air + eps
         self.df["feels_like_approx"] = t_air - 0.55 * (1 - rh_proxy) * (t_air - 14.5)
 
         logger.info("Created feels_like_approx (simplified heat-index proxy)")
